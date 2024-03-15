@@ -1,18 +1,24 @@
 /**
- * Returns a string of set values that start with a specific string.
- * @param {Set} set - The set of values.
- * @param {String} startString - The string to match.
- * @returns {String} - Concatenated string of matched values.
+ * Joins a set of strings with a dash after stripping the strings of
+ * a leading sub string.
+ * @param {Set<String>} set - A collection of strings.
+ * @param {String} startString - The string to strip from the beginning
+ * of each item in the set.
+ * @returns {String}
  */
 export default function cleanSet(set, startString) {
-  if (!(set instanceof Set) || typeof startString !== 'string') {
-    throw new TypeError('Invalid arguments. Expected Set and String.');
+  const parts = [];
+  if (!set || !startString || !(set instanceof Set) || typeof startString !== 'string') {
+    return '';
   }
-  let result = '';
-  for (const value of set) {
-    if (value.startsWith(startString)) {
-      result += value.slice(startString.length) + '-';
+  for (const value of set.values()) {
+    if (typeof value === 'string' && value.startsWith(startString)) {
+      const valueSubStr = value.substring(startString.length);
+
+      if (valueSubStr && valueSubStr !== value) {
+        parts.push(valueSubStr);
+      }
     }
   }
-  return result.slice(0, -1);
+  return parts.join('-');
 }
