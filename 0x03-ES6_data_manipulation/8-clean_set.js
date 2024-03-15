@@ -5,11 +5,14 @@
  * @returns {String} - Concatenated string of matched values.
  */
 export default function cleanSet(set, startString) {
-  if (set instanceof Set) {
-    return Array.from(set)
-      .filter((value) => value.startsWith(startString))
-      .map((value) => value.slice(startString.length))
-      .join('-');
+  if (!(set instanceof Set) || typeof startString !== 'string') {
+    throw new TypeError('Invalid arguments. Expected Set and String.');
   }
-  return '';
+  let result = '';
+  for (const value of set) {
+    if (value.startsWith(startString)) {
+      result += value.slice(startString.length) + '-';
+    }
+  }
+  return result.slice(0, -1);
 }
